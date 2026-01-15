@@ -26,10 +26,10 @@ export const Experience = ({ onLoad }) => {
     showPhysicsDebug: { value: false, label: "Show Physics Colliders" }
   });
 
-  // useHelper(directionalLightRef, DirectionalLightHelper, 1, "red");
-  // useHelper(directionalLightRef1, DirectionalLightHelper, 1, "blue");
+
   return (
     <>
+    <OrbitControls/>
 
       {showPerf && <Perf position="top-left" />}
       {/* Sky */}
@@ -42,8 +42,8 @@ export const Experience = ({ onLoad }) => {
         position={[10, 41, 12]}
         intensity={1}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-far={100}
         shadow-camera-left={-50}
         shadow-camera-right={50}
@@ -55,8 +55,8 @@ export const Experience = ({ onLoad }) => {
         ref={directionalLightRef1}
         position={[-45, 71, 0]}
         intensity={1.7}
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-far={100}
         shadow-camera-left={-50}
         shadow-camera-right={50}

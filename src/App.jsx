@@ -188,7 +188,7 @@ function App() {
     <>
       <LoadingScreen isLoading={isLoading} />
       <Leva collapsed  hidden/>
-      {(isMobile && !isLoading) && (
+      {(isMobile && !isLoading && !isAnyPopupOpen) && (
         <EcctrlJoystick />
       )}
       <KeyboardControls map={keyboardMap}>

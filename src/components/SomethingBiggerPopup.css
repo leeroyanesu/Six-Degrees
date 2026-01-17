@@ -10,6 +10,8 @@
   align-items: center;
   z-index: 1000;
   animation: fadeIn 0.3s ease-in-out;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  -webkit-overflow-scrolling: touch;
 }
 
 @keyframes fadeIn {
@@ -28,9 +30,12 @@
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.4s ease-out;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 @keyframes slideUp {
@@ -51,14 +56,16 @@
   background: rgba(0, 0, 0, 0.1);
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   font-size: 32px;
   line-height: 1;
   cursor: pointer;
   color: #333;
   transition: all 0.2s;
   z-index: 10;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .popup-close:hover {
@@ -209,7 +216,8 @@
   background: #2196F3;
   color: white;
   border: none;
-  padding: 15px 40px;
+  padding: 16px 40px;
+  min-height: 48px;
   border-radius: 30px;
   font-size: 1.1rem;
   font-weight: 600;
@@ -217,6 +225,10 @@
   transition: all 0.3s;
   box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
   margin-top: 20px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  max-width: 300px;
 }
 
 .explore-button:hover {
@@ -350,15 +362,19 @@
 }
 
 .answer-input {
-  width: 90%;
+  width: 100%;
+  box-sizing: border-box;
   padding: 15px;
+  min-height: 100px;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1.5;
   resize: vertical;
   transition: border-color 0.3s;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .answer-input:focus {
@@ -516,7 +532,9 @@
 
 .dream-input {
   width: 100%;
+  box-sizing: border-box;
   padding: 15px;
+  min-height: 100px;
   border: 2px solid #2196F3;
   border-radius: 10px;
   font-family: inherit;
@@ -524,6 +542,8 @@
   line-height: 1.5;
   resize: vertical;
   transition: border-color 0.3s;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .dream-input:focus {
@@ -538,56 +558,129 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+  .popup-overlay {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .popup-container {
+    width: 100%;
+    max-height: calc(100vh - 20px);
+    border-radius: 15px;
+    margin-top: 10px;
+  }
+
   .popup-content {
-    padding: 30px 20px;
+    padding: 25px 15px;
+  }
+
+  .popup-close {
+    top: 15px;
+    right: 15px;
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
   }
 
   .popup-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    margin-bottom: 25px;
   }
 
   .connection-circle {
-    width: 220px;
-    height: 220px;
+    width: 200px;
+    height: 200px;
+    margin: 30px auto;
+  }
+
+  .circle-label {
+    font-size: 0.9rem;
   }
 
   .circle-highlight {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+
+  .circle-subtitle {
+    font-size: 0.85rem;
   }
 
   .popup-description {
-    padding: 20px;
+    padding: 20px 15px;
+    margin: 30px 0;
   }
 
   .popup-description p {
     font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .explore-button {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px 30px;
+    font-size: 1rem;
+    min-height: 50px;
+  }
+
+  .popup-footer {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    font-size: 0.75rem;
   }
 
   .exercise-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+
+  .exercise-instruction {
+    padding: 20px 15px;
   }
 
   .question-block {
     flex-direction: column;
     gap: 10px;
+    padding: 20px 15px;
   }
 
   .question-number {
     min-width: auto;
   }
 
+  .question-text {
+    font-size: 0.95rem;
+  }
+
+  .question-subtext {
+    font-size: 0.85rem;
+  }
+
+  .practice-header {
+    margin: -25px -15px 20px -15px;
+  }
+
+  .header-wave {
+    padding: 30px 20px;
+  }
+
   .practice-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+
+  .practice-instruction p {
+    font-size: 1rem;
   }
 
   .numbers-display {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    padding: 0 20px;
+    padding: 0 10px;
+    margin: 30px 0;
   }
 
   .number {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
   .number-1 {
@@ -615,6 +708,201 @@
   }
 
   .dream-question {
-    padding: 20px;
+    padding: 20px 15px;
+  }
+
+  .dream-prompt {
+    font-size: 0.95rem;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  .popup-overlay {
+    padding: 5px;
+  }
+
+  .popup-container {
+    border-radius: 12px;
+    max-height: calc(100vh - 10px);
+  }
+
+  .popup-content {
+    padding: 20px 12px;
+  }
+
+  .popup-close {
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+  }
+
+  .popup-title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+
+  .connection-circle {
+    width: 160px;
+    height: 160px;
+    margin: 20px auto;
+  }
+
+  .connection-circle::before {
+    top: -20px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid #2196F3;
+  }
+
+  .connection-circle::after {
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border-width: 2px;
+  }
+
+  .circle-label {
+    font-size: 0.75rem;
+  }
+
+  .circle-highlight {
+    font-size: 1.3rem;
+  }
+
+  .circle-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .popup-description {
+    padding: 15px 12px;
+    margin: 20px 0;
+  }
+
+  .popup-description p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .explore-button {
+    padding: 14px 25px;
+    font-size: 0.95rem;
+    min-height: 48px;
+  }
+
+  .exercise-title {
+    font-size: 1.3rem;
+  }
+
+  .degree-label {
+    font-size: 0.7rem;
+  }
+
+  .exercise-instruction {
+    padding: 15px 12px;
+  }
+
+  .question-block {
+    padding: 15px 12px;
+    margin-bottom: 20px;
+  }
+
+  .question-number {
+    font-size: 1rem;
+  }
+
+  .question-text {
+    font-size: 0.9rem;
+  }
+
+  .question-subtext {
+    font-size: 0.8rem;
+  }
+
+  .answer-input,
+  .dream-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px;
+    min-height: 80px;
+  }
+
+  .practice-header {
+    margin: -20px -12px 15px -12px;
+  }
+
+  .header-wave {
+    padding: 25px 15px;
+  }
+
+  .header-wave::after {
+    bottom: -20px;
+    height: 40px;
+  }
+
+  .practice-title {
+    font-size: 1.3rem;
+  }
+
+  .practice-instruction {
+    margin: 30px 0 20px;
+    padding: 0 10px;
+  }
+
+  .practice-instruction p {
+    font-size: 0.9rem;
+  }
+
+  .numbers-display {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0;
+    margin: 20px 0;
+  }
+
+  .number {
+    font-size: 2rem;
+  }
+
+  .dream-question {
+    padding: 15px 12px;
+    margin: 20px 0;
+  }
+
+  .dream-prompt {
+    font-size: 0.85rem;
+  }
+}
+
+/* Landscape mode on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .popup-container {
+    max-height: calc(100vh - 10px);
+    margin-top: 5px;
+  }
+
+  .popup-content {
+    padding: 20px 15px;
+  }
+
+  .connection-circle {
+    width: 150px;
+    height: 150px;
+    margin: 20px auto;
+  }
+
+  .popup-title {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+  }
+
+  .popup-description {
+    margin: 20px 0;
+  }
+
+  .numbers-display {
+    margin: 20px 0;
   }
 }

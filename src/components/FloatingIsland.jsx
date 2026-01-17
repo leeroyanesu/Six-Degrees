@@ -83,7 +83,6 @@ const Portal = memo(({ node, texture, flipY, }) => {
 });
 
 const PortalLight = memo(({ node, portalRef }) => {
-    console.log(JSON.stringify(node))
     return (
         <RigidBody type="fixed" colliders="trimesh">
             <mesh
@@ -133,11 +132,6 @@ export const FloatingIsland = () => {
         });
     }, [groundTexture, houseTexture, portalTexture, signsTexture]);
     const portalMaterialRef = useRef();
-
-    const questionPosition = useControls('Question Position', {
-        x: { value: 5, min: -25, max: 25, step: 0.5 },
-        z: { value: 5, min: -25, max: 25, step: 0.5 }
-    });
 
     useFrame((state, delta) => {
         if (portalMaterialRef.current) {
@@ -202,11 +196,8 @@ export const FloatingIsland = () => {
                 <Signs key={node.uuid} node={node} texture={signsTexture} flipY={false} />
             ))}
 
-            {/* Question Mark */}
-            <Question key={uuidv4()} position={{ x: -0.5, z: 19 }} hasPassed={false} />
-            <Question key={uuidv4()} position={{ x: -23, z: -10 }} hasPassed={false} />
-            <Question key={uuidv4()} position={{ x: -2, z: -4 }} hasPassed={false} />
-            <Question key={uuidv4()} position={{ x: 18, z: -13 }} hasPassed={false} />
+           
+           
 
             {/* Invisible barrier walls to prevent falling off */}
             <BarrierWalls />

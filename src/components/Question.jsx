@@ -3,18 +3,18 @@ import { RigidBody } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 
-export const Question = ({ position, hasPassed = false }) => {
+export const Question = ({ position, hasPassed = false, onPlayerEnter }) => {
     const { nodes } = useGLTF("/model/Question_mark.glb");
     const texture = useTexture("/model/question_mark.png");
     const meshRef = useRef();
     const glowRef = useRef();
+    const sensorRef = useRef();
     
     texture.flipY = false;
     texture.needsUpdate = true;    
-    // Hide the question if it has been passed
-    if (hasPassed) return null;
+    
     useFrame((state, delta) => {
-        if (meshRef.current) {
+        if (!hasPassed && meshRef.current) {
             // Rotate the question mark
             meshRef.current.rotation.y += delta * 1.5;
             
@@ -23,14 +23,39 @@ export const Question = ({ position, hasPassed = false }) => {
         }
         
         // Pulsing glow effect
-        if (glowRef.current) {
+        if (!hasPassed && glowRef.current) {
             glowRef.current.emissiveIntensity = 0.5 + Math.sin(state.clock.elapsedTime * 3) * 0.3;
         }
     });
 
+    const handleIntersection = ({ other }) => {
+        console.log("=== Intersection Detected ===");
+        console.log("Other object:", other);
+        console.log("RigidBody object:", other.rigidBodyObject);
+        console.log("RigidBody name:", other.rigidBodyObject?.name);
+        
+        // Trigger the callback - no name check needed
+        if (onPlayerEnter) {
+            console.log("Calling onPlayerEnter callback");
+            onPlayerEnter();
+        }
+    };
+
+    // Hide the question if it has been passed - moved after all hooks
+    if (hasPassed) return null;
+
     return (
         <group position={[position.x, 0, position.z]}>
-              <mesh
+            {/* Sensor to detect player proximity */}
+            <RigidBody 
+                ref={sensorRef}
+                type="fixed" 
+                sensor 
+                onIntersectionEnter={handleIntersection}
+                colliders="ball"
+                name="questionSensor"
+            >
+               <mesh
                 ref={meshRef}
                 geometry={nodes.Icosphere.geometry}
                 position={nodes.Icosphere.position}
@@ -39,7 +64,7 @@ export const Question = ({ position, hasPassed = false }) => {
                 castShadow
                 receiveShadow
             >
-                <meshStandardMaterial 
+                <meshStandardMaterial
                     ref={glowRef}
                     map={texture}
                     emissive="#ffff00"
@@ -47,7 +72,6 @@ export const Question = ({ position, hasPassed = false }) => {
                     toneMapped={false}
                 />
             </mesh>
-            
             {/* Glow sphere behind the question mark */}
             <mesh position={[0, 0, 0]} scale={1.5}>
                 <sphereGeometry args={[0.5, 16, 16]} />
@@ -57,6 +81,10 @@ export const Question = ({ position, hasPassed = false }) => {
                     opacity={0.15}
                 />
             </mesh>
+            </RigidBody>
+           
+            
+            
         </group>
     );
 };

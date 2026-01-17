@@ -2,9 +2,10 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 import Ecctrl from '../ecctrl/src/Ecctrl'
 
-export function Infinite({ ...props }) {
+export function Infinite({ disableControl = false, ...props }) {
     const { nodes, materials } = useGLTF('/model/Infinite.glb')
     const characterRef = useRef()
 
@@ -26,10 +27,12 @@ export function Infinite({ ...props }) {
             camMaxDis={-7}
             camMinDis={-3}
             camInitDir={{ x: 0.5, y: -3, z: 0 }}
+            disableControl={disableControl}
+            animated
             {...props}
         >
             {/* Character model - rotated 180 degrees to face correct direction */}
-            <group >
+            <group>
                 <mesh
                     name="infi"
                     castShadow

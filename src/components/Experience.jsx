@@ -1,88 +1,62 @@
-import { OrbitControls, Sky } from "@react-three/drei";
-import { Perf } from "r3f-perf";
-import { FloatingIsland } from "./FloatingIsland";
-import { AnimatedClouds } from "./AnimatedClouds";
-import { Infinite } from "./Infinite";
-import { useRef, Suspense, useEffect } from "react";
-import { useHelper } from "@react-three/drei";
-import { DirectionalLightHelper } from "three";
-import { useControls } from "leva";
-import { Physics } from "@react-three/rapier";
+import { useState } from "react";
+import { Scene1 } from "./Scene1";
 
-export const Experience = ({ onLoad }) => {
-  const directionalLightRef = useRef();
-  const directionalLightRef1 = useRef();
+// Scene Manager Component
+export const Experience = ({
+  onLoad,
+  hasPassedQuestion1,
+  hasPassedQuestion2,
+  hasPassedQuestion3,
+  hasPassedQuestion4,
+  onQuestion1Enter,
+  onQuestion2Enter,
+  onQuestion3Enter,
+  onQuestion4Enter
+}) => {
+  const [currentScene, setCurrentScene] = useState(1);
 
-  useEffect(() => {
-    // Delay to ensure everything is loaded
-    const timer = setTimeout(() => {
-      if (onLoad) onLoad();
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [onLoad]);
+  const handleScene1Complete = () => {
+    console.log("Scene 1 completed! Moving to Scene 2...");
+    // setCurrentScene(2); // Uncomment when Scene2 is ready
+  };
 
-  const { showPerf, showPhysicsDebug } = useControls("Debug", {
-    showPerf: { value: false, label: "Show Performance Monitor" },
-    showPhysicsDebug: { value: false, label: "Show Physics Colliders" }
-  });
+  // Render current scene
+  const renderScene = () => {
+    switch (currentScene) {
+      case 1:
+        return (
+          <Scene1
+            onLoad={onLoad}
+            hasPassedQuestion1={hasPassedQuestion1}
+            hasPassedQuestion2={hasPassedQuestion2}
+            hasPassedQuestion3={hasPassedQuestion3}
+            hasPassedQuestion4={hasPassedQuestion4}
+            onQuestion1Enter={onQuestion1Enter}
+            onQuestion2Enter={onQuestion2Enter}
+            onQuestion3Enter={onQuestion3Enter}
+            onQuestion4Enter={onQuestion4Enter}
+            onSceneComplete={handleScene1Complete}
+          />
+        );
+      // case 2:
+      //   return <Scene2 ... />;
+      default:
+        return (
+          <Scene1
+            onLoad={onLoad}
+            hasPassedQuestion1={hasPassedQuestion1}
+            hasPassedQuestion2={hasPassedQuestion2}
+            hasPassedQuestion3={hasPassedQuestion3}
+            hasPassedQuestion4={hasPassedQuestion4}
+            onQuestion1Enter={onQuestion1Enter}
+            onQuestion2Enter={onQuestion2Enter}
+            onQuestion3Enter={onQuestion3Enter}
+            onQuestion4Enter={onQuestion4Enter}
+            onSceneComplete={handleScene1Complete}
+          />
+        );
+    }
+  };
 
-
-  return (
-    <>
-    <OrbitControls/>
-
-      {showPerf && <Perf position="top-left" />}
-      {/* Sky */}
-      <Sky/>
-
-      {/* Lighting */}
-      <ambientLight intensity={0.2} />
-      <directionalLight
-        ref={directionalLightRef}
-        position={[10, 41, 12]}
-        intensity={1}
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-camera-far={100}
-        shadow-camera-left={-50}
-        shadow-camera-right={50}
-        shadow-camera-top={50}
-        shadow-camera-bottom={-50}
-        shadow-bias={-0.0001}
-      />
-      <directionalLight
-        ref={directionalLightRef1}
-        position={[-45, 71, 0]}
-        intensity={1.7}
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-camera-far={100}
-        shadow-camera-left={-50}
-        shadow-camera-right={50}
-        shadow-camera-top={50}
-        shadow-camera-bottom={-50}
-        shadow-bias={-0.0001}
-      />
-      <hemisphereLight
-        skyColor="#87CEEB"
-        groundColor="#68a0cf"
-        intensity={0.4}
-      />
-
-      {/* Physics World */}
-      <Physics debug={showPhysicsDebug} gravity={[0, -9.81, 0]} timeStep="vary">
-        <Suspense fallback={null}>
-          {/* Floating Island */}
-          <FloatingIsland />
-
-          {/* Character */}
-         <Infinite />
-        </Suspense>
-      </Physics>
-
-      {/* Animated Clouds */}
-      <AnimatedClouds />
-    </>
-  );
+  return renderScene();
 };

@@ -187,7 +187,7 @@ function App() {
   return (
     <>
       <LoadingScreen isLoading={isLoading} />
-      <Leva collapsed />
+      {/* <Leva collapsed /> */}
       {(isMobile && !isLoading) && (
         <EcctrlJoystick />
       )}

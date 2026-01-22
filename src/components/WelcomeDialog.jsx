@@ -11,7 +11,7 @@ export const WelcomeDialog = ({ onComplete, start }) => {
             const timeout = setTimeout(() => {
                 setDisplayedText((prev) => prev + fullText.charAt(index));
                 setIndex((prev) => prev + 1);
-            }, 300); // Typing speed
+            }, 50); // Typing speed
             return () => clearTimeout(timeout);
         } else if (index >= fullText.length) {
             setIsFinished(true);
@@ -28,7 +28,7 @@ export const WelcomeDialog = ({ onComplete, start }) => {
         if (isFinished) {
             const timer = setTimeout(() => {
                 onComplete();
-            }, 3000); // Wait 3 seconds after typing finishes
+            }, 5000); // Wait 5 seconds after typing finishes
             return () => clearTimeout(timer);
         }
     }, [isFinished, onComplete]);

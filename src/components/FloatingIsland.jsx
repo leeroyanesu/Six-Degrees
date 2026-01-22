@@ -1,14 +1,11 @@
 import { useGLTF, useTexture, shaderMaterial } from "@react-three/drei";
 import { useFrame, extend } from "@react-three/fiber";
-import { useRef, useMemo, useEffect, memo } from "react";
-import { useControls } from "leva";
-import { RigidBody, CuboidCollider } from "@react-three/rapier";
+import { useRef, useMemo, memo } from "react";
+import { RigidBody, } from "@react-three/rapier";
 import * as THREE from 'three';
 import portalVertexShaders from '../shaders/portal/vertex.glsl';
 import fragmentShader from '../shaders/portal/fragment.glsl';
 import { BarrierWalls } from './BarrierWalls';
-import { Question } from './Question';
-import { v4 as uuidv4 } from 'uuid';
 
 const PortalMaterial = shaderMaterial(
     {
@@ -97,40 +94,21 @@ const PortalLight = memo(({ node, portalRef }) => {
     );
 });
 
-const Signs = memo(({ node, texture, flipY }) => {
-    texture.flipY = flipY;
-    texture.needsUpdate = true;
 
-    return (
-        <RigidBody type="fixed" colliders="trimesh">
-            <mesh
-                geometry={node.geometry}
-                position={node.position}
-                rotation={node.rotation}
-                scale={node.scale}
-                castShadow
-                receiveShadow
-            >
-                <meshStandardMaterial map={texture} />
-            </mesh>
-        </RigidBody>
-    );
-});
 
 export const FloatingIsland = () => {
     const { nodes } = useGLTF("/model/floating_island.glb");
     const groundTexture = useTexture("/model/Ground.png");
     const houseTexture = useTexture("/model/House.png");
     const portalTexture = useTexture("/model/Baked.jpg");
-    const signsTexture = useTexture("/model/Signs.png");
 
     // Optimize textures
     useMemo(() => {
-        [groundTexture, houseTexture, portalTexture, signsTexture].forEach(texture => {
+        [groundTexture, houseTexture, portalTexture].forEach(texture => {
             texture.anisotropy = 1; // Reduce anisotropic filtering
             texture.generateMipmaps = true;
         });
-    }, [groundTexture, houseTexture, portalTexture, signsTexture]);
+    }, [groundTexture, houseTexture, portalTexture]);
     const portalMaterialRef = useRef();
 
     useFrame((state, delta) => {
@@ -141,12 +119,11 @@ export const FloatingIsland = () => {
     const islandRef = useRef();
 
     // Categorize nodes by type
-    const { groundNodes, houseNodes, portalNodes, portalLightNodes, signsNodes } = useMemo(() => {
+    const { groundNodes, houseNodes, portalNodes, portalLightNodes } = useMemo(() => {
         const ground = [];
         const house = [];
         const portal = [];
         const portalLight = [];
-        const signs = [];
 
 
         Object.keys(nodes).forEach((key) => {
@@ -161,13 +138,11 @@ export const FloatingIsland = () => {
                     portalLight.push(node);
                 } else if (nodeName.includes("portal")) {
                     portal.push(node);
-                } else if (nodeName.includes("signs")) {
-                    signs.push(node);
                 }
             }
         });
 
-        return { groundNodes: ground, houseNodes: house, portalNodes: portal, signsNodes: signs, portalLightNodes: portalLight };
+        return { groundNodes: ground, houseNodes: house, portalNodes: portal, portalLightNodes: portalLight };
     }, [nodes]);
 
 
@@ -191,13 +166,6 @@ export const FloatingIsland = () => {
             {portalLightNodes.map((node) => (
                 <PortalLight key={node.uuid} portalRef={portalMaterialRef} node={node} />
             ))}
-
-            {signsNodes.map((node) => (
-                <Signs key={node.uuid} node={node} texture={signsTexture} flipY={false} />
-            ))}
-
-           
-           
 
             {/* Invisible barrier walls to prevent falling off */}
             <BarrierWalls />

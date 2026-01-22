@@ -1,243 +1,137 @@
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
-import { SomethingBiggerPopup } from "./components/SomethingBiggerPopup";
-import { NurtureExercisePopup } from "./components/NurtureExercisePopup";
-import { WonderousRelationshipPopup } from "./components/WonderousRelationshipPopup";
-import { KeepPracticePopup } from "./components/KeepPracticePopup";
-import { Leva, useControls } from "leva";
+// Removed unused popup imports
+import { Scoreboard } from "./components/Scoreboard";
+import { Notebook } from "./components/Notebook";
+import { LoadingScreen } from "./components/LoadingScreen";
+import { WelcomeDialog } from "./components/WelcomeDialog";
+import { ImpactorPopup } from "./components/ImpactorPopup";
+import { Leva } from "leva";
 import { KeyboardControls } from "@react-three/drei";
-import { useEffect, useRef, useState, useCallback, memo, useMemo, Suspense } from "react";
+import { useEffect, useState, useMemo, Suspense } from "react";
 import { EcctrlJoystick } from "./ecctrl/src/EcctrlJoystick";
 
-function LoadingScreen({ isLoading }) {
-  return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 9999,
-      opacity: isLoading ? 1 : 0,
-      pointerEvents: isLoading ? 'all' : 'none',
-      transition: 'opacity 0.5s ease-out'
-    }}>
-      <div style={{
-        fontSize: '48px',
-        color: 'white',
-        fontWeight: 'bold',
-        marginBottom: '20px',
-        fontFamily: 'Arial, sans-serif'
-      }}>
-        Six Degrees
-      </div>
-      <div style={{
-        width: '200px',
-        height: '4px',
-        background: 'rgba(255, 255, 255, 0.3)',
-        borderRadius: '2px',
-        overflow: 'hidden',
-        position: 'relative'
-      }}>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          height: '100%',
-          width: '50%',
-          background: 'white',
-          borderRadius: '2px',
-          animation: 'loading 1.5s ease-in-out infinite'
-        }} />
-      </div>
-      <div style={{
-        marginTop: '20px',
-        color: 'rgba(255, 255, 255, 0.8)',
-        fontSize: '16px'
-      }}>
-        Loading scene...
-      </div>
-      <style>{`
-        @keyframes loading {
-          0% { left: 0; width: 0; }
-          50% { left: 25%; width: 50%; }
-          100% { left: 100%; width: 0; }
-        }
-      `}</style>
-    </div>
-  );
-}
-
+const IMPACTORS = [
+  {
+    id: 1,
+    name: "Orville Wright",
+    partner: "Wilbur Wright",
+    fact: "Together they achieved the first powered, sustained, and controlled airplane flight.",
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Orville_Wright_1905-crop.jpg/960px-Orville_Wright_1905-crop.jpg',
+    partnerImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Wilbur_Wright-crop.jpg/960px-Wilbur_Wright-crop.jpg'
+  },
+  {
+    id: 2,
+    name: "Marie Curie",
+    partner: "Pierre Curie",
+    fact: "This husband-and-wife duo pioneered research on radioactivity, winning a Nobel Prize together.",
+    image: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Marie_Curie_c._1920s.jpg',
+    partnerImage: 'https://upload.wikimedia.org/wikipedia/commons/d/db/Pierre_Curie_by_Dujardin_c1906.jpg'
+  },
+  {
+    id: 3,
+    name: "Steve Jobs",
+    partner: "Steve Wozniak",
+    fact: "The two Steves combined marketing vision and engineering genius to launch the personal computer revolution.",
+    image: 'https://upload.wikimedia.org/wikipedia/commons/d/dc/Steve_Jobs_Headshot_2010-CROP_%28cropped_2%29.jpg',
+    partnerImage: 'https://upload.wikimedia.org/wikipedia/commons/6/6e/Steve_Wozniak_by_Gage_Skidmore_3_%28cropped%29.jpg'
+  },
+  {
+    id: 4,
+    name: "Paul McCartney",
+    partner: "John Lennon",
+    fact: "Their songwriting partnership created some of the most influential music in history with The Beatles.",
+    image: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/MaccaLyricsRFH051121_%2815_of_18%29_%28updated%29_%28cropped%29.jpg',
+    partnerImage: 'https://upload.wikimedia.org/wikipedia/commons/8/85/John_Lennon_%22Walls_and_Bridges%22_1974_press_photo_2_%28color%29_%28cropped%29.jpg'
+  }
+];
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  
-  // First question (info popup) states
-  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
-  const [hasPassedQuestion1, setHasPassedQuestion1] = useState(false);
-  
-  // Second question (exercise popup) states
-  const [isExercisePopupOpen, setIsExercisePopupOpen] = useState(false);
-  const [hasPassedQuestion2, setHasPassedQuestion2] = useState(false);
-  
-  // Third question (wonderous relationship popup) states
-  const [isWonderousPopupOpen, setIsWonderousPopupOpen] = useState(false);
-  const [hasPassedQuestion3, setHasPassedQuestion3] = useState(false);
-  
-  // Fourth question (keep practice popup) states
-  const [isPracticePopupOpen, setIsPracticePopupOpen] = useState(false);
-  const [hasPassedQuestion4, setHasPassedQuestion4] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
 
-  const handleQuestion1Enter = () => {
-    console.log("Question 1 triggered");
-    if (!hasPassedQuestion1) {
-      setIsInfoPopupOpen(true);
+  // Game State
+  const [collectedStars, setCollectedStars] = useState(new Set());
+  const [activeImpactor, setActiveImpactor] = useState(null);
+
+  const handleStarEnter = (id) => {
+    const impactor = IMPACTORS.find(i => i.id === id);
+    if (impactor) {
+      setActiveImpactor(impactor);
     }
   };
 
-  const handleQuestion2Enter = () => {
-    console.log("Question 2 triggered");
-    if (!hasPassedQuestion2) {
-      setIsExercisePopupOpen(true);
+  const handleImpactorClose = () => {
+    if (activeImpactor) {
+      setCollectedStars(prev => {
+        const newSet = new Set(prev);
+        newSet.add(activeImpactor.id);
+        return newSet;
+      });
+      setActiveImpactor(null);
     }
-  };
-
-  const handleQuestion3Enter = () => {
-    console.log("Question 3 triggered");
-    if (!hasPassedQuestion3) {
-      setIsWonderousPopupOpen(true);
-    }
-  };
-
-  const handleQuestion4Enter = () => {
-    console.log("Question 4 triggered");
-    if (!hasPassedQuestion4) {
-      setIsPracticePopupOpen(true);
-    }
-  };
-
-  // Only "Continue Exploring" marks question as passed and closes popup
-  const handleInfoContinue = () => {
-    setIsInfoPopupOpen(false);
-    setHasPassedQuestion1(true);
-  };
-
-  const handleExerciseContinue = () => {
-    setIsExercisePopupOpen(false);
-    setHasPassedQuestion2(true);
-  };
-
-  const handleWonderousContinue = () => {
-    setIsWonderousPopupOpen(false);
-    setHasPassedQuestion3(true);
-  };
-
-  const handlePracticeContinue = () => {
-    setIsPracticePopupOpen(false);
-    setHasPassedQuestion4(true);
-  };
-
-  // X button only closes popup, doesn't mark as passed
-  const handleInfoClose = () => {
-    setIsInfoPopupOpen(false);
-  };
-
-  const handleExerciseClose = () => {
-    setIsExercisePopupOpen(false);
-  };
-
-  const handleWonderousClose = () => {
-    setIsWonderousPopupOpen(false);
-  };
-
-  const handlePracticeClose = () => {
-    setIsPracticePopupOpen(false);
   };
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
     };
-    
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  
-
-  const isAnyPopupOpen = isInfoPopupOpen || isExercisePopupOpen || isWonderousPopupOpen || isPracticePopupOpen;
+  const isPopupOpen = showWelcome || activeImpactor !== null;
 
   const keyboardMap = useMemo(() => [
-    { name: 'forward', keys: isAnyPopupOpen ? [] : ['ArrowUp', 'KeyW'] },
-    { name: 'backward', keys: isAnyPopupOpen ? [] : ['ArrowDown', 'KeyS'] },
-    { name: 'leftward', keys: isAnyPopupOpen ? [] : ['ArrowLeft', 'KeyA'] },
-    { name: 'rightward', keys: isAnyPopupOpen ? [] : ['ArrowRight', 'KeyD'] },
-    { name: 'jump', keys: isAnyPopupOpen ? [] : ['Space'] },
-    { name: 'run', keys: isAnyPopupOpen ? [] : ['Shift'] },
-  ], [isAnyPopupOpen]);
+    { name: 'forward', keys: isPopupOpen ? [] : ['ArrowUp', 'KeyW'] },
+    { name: 'backward', keys: isPopupOpen ? [] : ['ArrowDown', 'KeyS'] },
+    { name: 'leftward', keys: isPopupOpen ? [] : ['ArrowLeft', 'KeyA'] },
+    { name: 'rightward', keys: isPopupOpen ? [] : ['ArrowRight', 'KeyD'] },
+    { name: 'jump', keys: isPopupOpen ? [] : ['Space'] },
+    { name: 'run', keys: isPopupOpen ? [] : ['Shift'] },
+  ], [isPopupOpen]);
+
+  // Derived Props
+  const notebookData = IMPACTORS.map(i => ({
+    name: i.name,
+    checked: collectedStars.has(i.id)
+  }));
+
+  const badgeCount = Math.floor(collectedStars.size / 2);
 
   return (
     <>
       <LoadingScreen isLoading={isLoading} />
-      <Leva collapsed  hidden/>
-      {(isMobile && !isLoading && !isAnyPopupOpen) && (
+      <Leva collapsed hidden />
+      {(isMobile && !isLoading && !isPopupOpen) && (
         <EcctrlJoystick />
       )}
       <KeyboardControls map={keyboardMap}>
-        <Canvas
-          flat
-          shadows>
+        <Canvas flat shadows>
           <color attach="background" args={["#ececec"]} />
           <Suspense fallback={null}>
-            <Experience 
-              onLoad={() => setIsLoading(false)} 
-              hasPassedQuestion1={hasPassedQuestion1}
-              hasPassedQuestion2={hasPassedQuestion2}
-              hasPassedQuestion3={hasPassedQuestion3}
-              hasPassedQuestion4={hasPassedQuestion4}
-              onQuestion1Enter={handleQuestion1Enter}
-              onQuestion2Enter={handleQuestion2Enter}
-              onQuestion3Enter={handleQuestion3Enter}
-              onQuestion4Enter={handleQuestion4Enter}
+            <Experience
+              onLoad={() => setIsLoading(false)}
+              onStarEnter={handleStarEnter}
             />
           </Suspense>
         </Canvas>
       </KeyboardControls>
-      
-      {/* Something Bigger Info Popup - Outside Canvas */}
-      <SomethingBiggerPopup 
-        isOpen={isInfoPopupOpen} 
-        onClose={handleInfoClose}
-        onContinue={handleInfoContinue}
+
+      {/* UI Overlays */}
+      <Scoreboard badgeCount={badgeCount} />
+      <Notebook entries={notebookData} />
+
+      <WelcomeDialog
+        start={!isLoading && showWelcome}
+        onComplete={() => setShowWelcome(false)}
       />
-      
-      {/* Nurture Exercise Popup - Outside Canvas */}
-      <NurtureExercisePopup 
-        isOpen={isExercisePopupOpen} 
-        onClose={handleExerciseClose}
-        onContinue={handleExerciseContinue}
-      />
-      
-      {/* Wonderous Relationship Popup - Outside Canvas */}
-      <WonderousRelationshipPopup 
-        isOpen={isWonderousPopupOpen} 
-        onClose={handleWonderousClose}
-        onContinue={handleWonderousContinue}
-      />
-      
-      {/* Keep Practice Popup - Outside Canvas */}
-      <KeepPracticePopup 
-        isOpen={isPracticePopupOpen} 
-        onClose={handlePracticeClose}
-        onContinue={handlePracticeContinue}
+
+      <ImpactorPopup
+        data={activeImpactor}
+        onClose={handleImpactorClose}
       />
     </>
   );

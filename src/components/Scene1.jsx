@@ -3,7 +3,7 @@ import { Perf } from "r3f-perf";
 import { FloatingIsland } from "./FloatingIsland";
 import { AnimatedClouds } from "./AnimatedClouds";
 import { Infinite } from "./Infinite";
-import { Question } from "./Question";
+import { Star } from "./Star";
 import { useRef, Suspense, useEffect } from "react";
 import { useHelper } from "@react-three/drei";
 import { DirectionalLightHelper } from "three";
@@ -13,14 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export const Scene1 = ({
   onLoad,
-  hasPassedQuestion1,
-  hasPassedQuestion2,
-  hasPassedQuestion3,
-  hasPassedQuestion4,
-  onQuestion1Enter,
-  onQuestion2Enter,
-  onQuestion3Enter,
-  onQuestion4Enter,
+  onStarEnter,
   onSceneComplete
 }) => {
   const directionalLightRef = useRef();
@@ -35,17 +28,8 @@ export const Scene1 = ({
   }, [onLoad]);
 
   // Check if all questions are passed to complete the scene
-  useEffect(() => {
-    if (hasPassedQuestion1 && hasPassedQuestion2 && hasPassedQuestion3 && hasPassedQuestion4) {
-      if (onSceneComplete) {
-        // Delay to allow final popup to close
-        const completeTimer = setTimeout(() => {
-          onSceneComplete();
-        }, 1000);
-        return () => clearTimeout(completeTimer);
-      }
-    }
-  }, [hasPassedQuestion1, hasPassedQuestion2, hasPassedQuestion3, hasPassedQuestion4, onSceneComplete]);
+  // Check if all questions are passed logic removed for new game loop
+  // Future scene completion logic can be added here based on collected stars if needed
 
   const { showPerf, showPhysicsDebug } = useControls("Debug", {
     showPerf: { value: false, label: "Show Performance Monitor" },
@@ -101,44 +85,33 @@ export const Scene1 = ({
           {/* Floating Island */}
           <FloatingIsland />
 
-          {/* Question Mark 1 - Info Popup */}
-          <Question
-            key="question-1"
+          {/* Star 1 */}
+          <Star
+            key="star-1"
             position={{ x: -0.5, z: 19 }}
-            hasPassed={hasPassedQuestion1}
-            onPlayerEnter={onQuestion1Enter}
+            onPlayerEnter={() => onStarEnter(1)}
           />
 
-          {/* Question Mark 2 - Exercise Popup (only shows after first is passed) */}
-          {hasPassedQuestion1 && (
-            <Question
-              key="question-2"
-              position={{ x: -23, z: -10 }}
-              hasPassed={hasPassedQuestion2}
-              onPlayerEnter={onQuestion2Enter}
-            />
-          )}
+          {/* Star 2 */}
+          <Star
+            key="star-2"
+            position={{ x: -23, z: -10 }}
+            onPlayerEnter={() => onStarEnter(2)}
+          />
 
-          {/* Question Mark 3 - Keep Practice Popup (only shows after third is passed)  */}
-          {hasPassedQuestion2 && (
-            <Question
-              key="question-3"
-              position={{ x: 18, z: -13 }}
-              hasPassed={hasPassedQuestion3}
-              onPlayerEnter={onQuestion3Enter}
-            />
-          )}
+          {/* Star 3 */}
+          <Star
+            key="star-3"
+            position={{ x: 18, z: -13 }}
+            onPlayerEnter={() => onStarEnter(3)}
+          />
 
-
-          {/* Question Mark 4 - Wonderous Relationship Popup (only shows after second is passed)*/}
-          {hasPassedQuestion3 && (
-            <Question
-              key="question-4"
-              position={{ x: -2, z: -4 }}
-              hasPassed={hasPassedQuestion4}
-              onPlayerEnter={onQuestion4Enter}
-            />
-          )}
+          {/* Star 4 */}
+          <Star
+            key="star-4"
+            position={{ x: -2, z: -4 }}
+            onPlayerEnter={() => onStarEnter(4)}
+          />
 
           {/* Character */}
           <Infinite />

@@ -9,7 +9,8 @@ export const Experience = ({
   onFadeProgress,
   onStarEnter,
   hiddenStars = new Set(),
-  fadeProgress = 1
+  fadeProgress = 1,
+  isPopupOpen = false
 }) => {
   const [currentScene, setCurrentScene] = useState(1);
 
@@ -31,6 +32,7 @@ export const Experience = ({
             onSceneComplete={handleScene1Complete}
             hiddenStars={hiddenStars}
             fadeProgress={fadeProgress}
+            isPopupOpen={isPopupOpen}
           />
         );
       // case 2:
@@ -42,6 +44,7 @@ export const Experience = ({
             onStarEnter={onStarEnter}
             onSceneComplete={handleScene1Complete}
             hiddenStars={hiddenStars}
+            isPopupOpen={isPopupOpen}
           />
         );
     }

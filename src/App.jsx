@@ -424,7 +424,11 @@ function App() {
         <EcctrlJoystick />
       )}
       <KeyboardControls map={keyboardMap}>
-        <WalkingSoundController walkingSoundRef={walkingSoundRef} audioUnlocked={audioUnlocked} />
+        <WalkingSoundController 
+          walkingSoundRef={walkingSoundRef} 
+          audioUnlocked={audioUnlocked} 
+          isPopupOpen={isPopupOpen}
+        />
         <Canvas flat shadows>
           <color attach="background" args={["#ececec"]} />
           <Suspense fallback={null}>
@@ -435,6 +439,7 @@ function App() {
               onStarEnter={handleStarEnter}
               hiddenStars={hiddenStars}
               fadeProgress={fadeProgress}
+              isPopupOpen={isPopupOpen}
             />
           </Suspense>
         </Canvas>

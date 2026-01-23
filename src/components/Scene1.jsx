@@ -17,7 +17,8 @@ export const Scene1 = ({
   onSceneComplete,
   hiddenStars = new Set(),
   fadeProgress = 1,
-  onFadeProgress
+  onFadeProgress,
+  isPopupOpen = false
 }) => {
   const directionalLightRef = useRef();
   const directionalLightRef1 = useRef();
@@ -208,7 +209,7 @@ export const Scene1 = ({
           )}
 
           {/* Character */}
-          <Infinite />
+          <Infinite key={`char-${isPopupOpen}`} disableControl={isPopupOpen} />
         </Suspense>
       </Physics>
 

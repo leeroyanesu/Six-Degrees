@@ -52,7 +52,24 @@ export const WelcomeDialog = ({ onComplete, start }) => {
             zIndex: 10000,
             pointerEvents: 'none' // Subtitle style usually non-interactive
         }}>
-            <div style={{
+            <style>{`
+                @keyframes blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0; }
+                }
+                @media (max-width: 768px) {
+                    .welcome-dialog {
+                        font-size: 14px !important;
+                        width: 90% !important;
+                        bottom: 15% !important;
+                    }
+                    .welcome-dialog-inner {
+                        padding: 12px !important;
+                    }
+                }
+            `}</style>
+            <div className="welcome-dialog" style={{ fontSize: '24px', width: '80%', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+                <div className="welcome-dialog-inner" style={{
                 background: 'rgba(0, 0, 0, 0.6)',
                 padding: '20px',
                 borderRadius: '10px',
@@ -62,12 +79,7 @@ export const WelcomeDialog = ({ onComplete, start }) => {
                 {displayedText}
                 <span style={{ opacity: isFinished ? 0 : 1, animation: 'blink 1s infinite', marginLeft: '2px' }}>█</span>
             </div>
-            <style>{`
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-      `}</style>
+            </div>
         </div>
     );
 };

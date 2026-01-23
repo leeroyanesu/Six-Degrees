@@ -40,17 +40,17 @@ export const WelcomeDialog = ({ onComplete, start }) => {
             position: 'fixed',
             bottom: '10%',
             left: '50%',
+            top:'45%',
             transform: 'translateX(-50%)',
             width: '80%',
             maxWidth: '800px',
-            textAlign: 'left',
             color: 'white',
             textShadow: '0 2px 4px rgba(0,0,0,0.8)',
             fontFamily: "'Cinzel', serif",
             fontSize: '24px',
             lineHeight: '1.5',
             zIndex: 10000,
-            pointerEvents: 'none' // Subtitle style usually non-interactive
+            pointerEvents: 'none'
         }}>
             <style>{`
                 @keyframes blink {
@@ -58,27 +58,22 @@ export const WelcomeDialog = ({ onComplete, start }) => {
                     50% { opacity: 0; }
                 }
                 @media (max-width: 768px) {
-                    .welcome-dialog {
-                        font-size: 14px !important;
-                        width: 90% !important;
-                        bottom: 15% !important;
-                    }
                     .welcome-dialog-inner {
+                        font-size: 14px !important;
                         padding: 12px !important;
                     }
                 }
             `}</style>
-            <div className="welcome-dialog" style={{ fontSize: '24px', width: '80%', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
-                <div className="welcome-dialog-inner" style={{
+            <div className="welcome-dialog-inner" style={{
                 background: 'rgba(0, 0, 0, 0.6)',
                 padding: '20px',
                 borderRadius: '10px',
                 border: '1px solid rgba(255, 215, 0, 0.3)',
-                boxShadow: '0 0 20px rgba(0,0,0,0.5)'
+                boxShadow: '0 0 20px rgba(0,0,0,0.5)',
+                textAlign: 'center'
             }}>
                 {displayedText}
                 <span style={{ opacity: isFinished ? 0 : 1, animation: 'blink 1s infinite', marginLeft: '2px' }}>█</span>
-            </div>
             </div>
         </div>
     );

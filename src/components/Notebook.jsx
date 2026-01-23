@@ -48,7 +48,7 @@ export const Notebook = ({ entries = [] }) => {
                     bottom: '10px',
                     left: '10px',
                     width: '180px',
-                    height: '200px',
+                    height: '250px',
                     background: 'rgba(255, 255, 240, 0.9)', // Off-white notebook paper color
                     backgroundImage: 'repeating-linear-gradient(transparent, transparent 29px, #696969 30px)',
                     border: '8px solid #8B4513', // Brown leather-like border
@@ -70,7 +70,7 @@ export const Notebook = ({ entries = [] }) => {
                     }
                     .notebook-container {
                         width: 140px !important;
-                        height: 160px !important;
+                        height: 200px !important;
                         bottom: 5px !important;
                         left: ${isOpen ? '5px' : '-200px'} !important;
                         padding: 10px !important;

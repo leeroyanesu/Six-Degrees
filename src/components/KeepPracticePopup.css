@@ -1,0 +1,312 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap');
+
+.keep-practice-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.keep-practice-popup {
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid #FFD700;
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    color: white;
+    font-family: 'Cinzel', 'Georgia', serif;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+}
+
+.keep-practice-title {
+    text-align: center;
+    color: #FFD700;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 25px 0;
+    line-height: 1.3;
+    letter-spacing: 1px;
+}
+
+.reward-title {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.keep-practice-intro {
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #e0e0e0;
+    margin-bottom: 35px;
+    padding: 20px;
+    background: rgba(255, 215, 0, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid #FFD700;
+}
+
+.option-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.practice-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.practice-option:hover {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.3);
+    transform: translateX(5px);
+}
+
+.practice-option.selected {
+    background: rgba(255, 215, 0, 0.15);
+    border-color: #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.practice-radio {
+    margin-top: 2px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #FFD700;
+    flex-shrink: 0;
+}
+
+.practice-label {
+    color: #e0e0e0;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.feedback-message {
+    text-align: center;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #e0e0e0;
+    margin-bottom: 35px;
+    padding: 25px;
+    background: rgba(255, 215, 0, 0.08);
+    border-radius: 10px;
+    font-style: italic;
+}
+
+.reward-section {
+    margin-bottom: 30px;
+}
+
+.reward-card {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+    border: 2px solid #FFD700;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+}
+
+.card-icon {
+    font-size: 56px;
+    margin-bottom: 15px;
+}
+
+.card-name {
+    color: #FFD700;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-description {
+    color: #e0e0e0;
+    font-size: 15px;
+    line-height: 1.7;
+    margin: 0 0 25px 0;
+    text-align: left;
+}
+
+.card-practice {
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: left;
+}
+
+.card-practice strong {
+    color: #FFD700;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-practice p {
+    color: #e0e0e0;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+    font-style: italic;
+}
+
+.keep-practice-button {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cinzel', 'Georgia', serif;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.keep-practice-button:hover:not(:disabled) {
+    background: #FFD700;
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+.keep-practice-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.reward-button {
+    background: #FFD700;
+    color: #000;
+}
+
+.reward-button:hover {
+    background: #FFA500;
+    border-color: #FFA500;
+    box-shadow: 0 0 25px rgba(255, 165, 0, 0.6);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .keep-practice-popup {
+        padding: 25px;
+        max-height: 95vh;
+    }
+
+    .keep-practice-title {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .reward-title {
+        font-size: 26px;
+    }
+
+    .keep-practice-intro {
+        font-size: 14px;
+        padding: 15px;
+    }
+
+    .practice-option {
+        padding: 15px;
+    }
+
+    .practice-label {
+        font-size: 14px;
+    }
+
+    .feedback-message {
+        font-size: 15px;
+        padding: 20px;
+    }
+
+    .card-icon {
+        font-size: 48px;
+    }
+
+    .card-name {
+        font-size: 20px;
+    }
+
+    .card-description {
+        font-size: 14px;
+    }
+
+    .card-practice {
+        padding: 15px;
+    }
+
+    .card-practice strong {
+        font-size: 14px;
+    }
+
+    .card-practice p {
+        font-size: 13px;
+    }
+
+    .keep-practice-button {
+        font-size: 14px;
+        padding: 12px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .keep-practice-popup {
+        padding: 20px;
+    }
+
+    .keep-practice-title {
+        font-size: 18px;
+        letter-spacing: 0.5px;
+    }
+
+    .reward-title {
+        font-size: 22px;
+    }
+
+    .keep-practice-intro {
+        font-size: 13px;
+    }
+
+    .practice-option {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .practice-label {
+        font-size: 13px;
+    }
+
+    .reward-card {
+        padding: 20px;
+    }
+
+    .card-description {
+        font-size: 13px;
+    }
+}

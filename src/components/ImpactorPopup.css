@@ -42,13 +42,8 @@
 }
 
 .impactor-image-main {
-    width: 350px;
-    height: 350px;
-}
-
-.impactor-image-partner {
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
 }
 
 .impactor-image img {
@@ -70,23 +65,57 @@
     font-weight: 600;
 }
 
-.impactor-partner {
-    font-size: 14px;
-    color: #aaa;
-    margin-bottom: 20px;
-    font-style: italic;
-}
-
-.impactor-partner span {
-    color: #fff;
-    font-weight: 600;
-}
-
-.impactor-fact {
-    line-height: 1.6;
+.impactor-movement {
     font-size: 16px;
-    margin-bottom: 30px;
+    color: #FFD700;
+    margin-bottom: 25px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.movement-label {
+    color: #aaa;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.impactor-section {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 215, 0, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #FFD700;
+}
+
+.section-title {
+    color: #FFD700;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-content {
     color: #e0e0e0;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.impactor-reflection {
+    background: rgba(255, 215, 0, 0.08);
+    border-left-color: #FFA500;
+}
+
+.impactor-reflection .section-title {
+    color: #FFA500;
+}
+
+.impactor-reflection .section-content {
+    font-style: italic;
+    color: #FFD700;
 }
 
 .impactor-button {
@@ -123,13 +152,8 @@
     }
 
     .impactor-image-main {
-        width: 130px;
-        height: 130px;
-    }
-
-    .impactor-image-partner {
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
     }
 
     .impactor-placeholder {
@@ -140,13 +164,22 @@
         font-size: 22px;
     }
 
-    .impactor-partner {
+    .impactor-movement {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 14px;
+    }
+
+    .section-content {
         font-size: 13px;
     }
 
-    .impactor-fact {
-        font-size: 14px;
-        margin-bottom: 20px;
+    .impactor-section {
+        padding: 12px;
+        margin-bottom: 15px;
     }
 
     .impactor-button {
@@ -165,13 +198,8 @@
     }
 
     .impactor-image-main {
-        width: 110px;
-        height: 110px;
-    }
-
-    .impactor-image-partner {
-        width: 85px;
-        height: 85px;
+        width: 120px;
+        height: 120px;
     }
 
     .impactor-placeholder {
@@ -183,13 +211,22 @@
         margin-bottom: 8px;
     }
 
-    .impactor-partner {
-        font-size: 12px;
+    .impactor-movement {
+        font-size: 13px;
         margin-bottom: 15px;
     }
 
-    .impactor-fact {
+    .section-title {
         font-size: 13px;
+    }
+
+    .section-content {
+        font-size: 12px;
         line-height: 1.5;
+    }
+
+    .impactor-section {
+        padding: 10px;
+        margin-bottom: 12px;
     }
 }

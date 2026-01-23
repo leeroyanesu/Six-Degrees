@@ -7,7 +7,6 @@ export const ImpactorPopup = ({ data, onClose }) => {
     return (
         <div className="impactor-popup">
             <div className="impactor-images-container">
-                {/* Main Character */}
                 <div className="impactor-image impactor-image-main">
                     {data.image ? (
                         <img 
@@ -20,35 +19,34 @@ export const ImpactorPopup = ({ data, onClose }) => {
                         </div>
                     )}
                 </div>
-
-                {/* Partner */}
-                <div className="impactor-image impactor-image-partner">
-                    {data.partnerImage ? (
-                        <img 
-                            src={data.partnerImage} 
-                            alt={data.partner}
-                        />
-                    ) : (
-                        <div className="impactor-placeholder">
-                            {data.partner?.charAt(0).toUpperCase()}
-                        </div>
-                    )}
-                </div>
             </div>
 
             <h2 className="impactor-name">{data.name}</h2>
 
-            <div className="impactor-partner">
-                Teamed up with: <span>{data.partner}</span>
+            <div className="impactor-movement">
+                <span className="movement-label">Movement:</span> {data.movement}
             </div>
 
-            <p className="impactor-fact">{data.fact}</p>
+            <div className="impactor-section">
+                <h3 className="section-title">Who:</h3>
+                <p className="section-content">{data.who}</p>
+            </div>
+
+            <div className="impactor-section">
+                <h3 className="section-title">Did you know?</h3>
+                <p className="section-content">{data.didYouKnow}</p>
+            </div>
+
+            <div className="impactor-section impactor-reflection">
+                <h3 className="section-title">Reflection:</h3>
+                <p className="section-content">{data.reflection}</p>
+            </div>
 
             <button
                 onClick={onClose}
                 className="impactor-button"
             >
-                ACKNOWLEDGMENT RECEIVED
+                CONTINUE JOURNEY
             </button>
         </div>
     );

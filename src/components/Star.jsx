@@ -3,11 +3,26 @@ import { useFrame } from "@react-three/fiber";
 import { RigidBody } from "@react-three/rapier";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+import { Howl } from 'howler';
 
 export const Star = ({ position, onPlayerEnter }) => {
   const meshRef = useRef();
   const glowRef = useRef();
   const sensorRef = useRef();
+  const starSoundRef = useRef(null);
+
+  // Initialize star collection sound
+  useEffect(() => {
+    starSoundRef.current = new Howl({
+      src: ['/audio/star_sound.mp3'],
+      volume: 0.7,
+      preload: true
+    });
+
+    return () => {
+      starSoundRef.current?.unload();
+    };
+  }, []);
 
   // Load the Star model
   const { scene } = useGLTF("/model/Star.glb");
@@ -50,6 +65,11 @@ export const Star = ({ position, onPlayerEnter }) => {
 
 
   const handleIntersection = ({ other }) => {
+    // Play star collection sound
+    if (starSoundRef.current) {
+      starSoundRef.current.play();
+    }
+    
     // Trigger the callback
     if (onPlayerEnter) {
       onPlayerEnter();

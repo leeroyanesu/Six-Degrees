@@ -1,6 +1,15 @@
 import React from 'react';
 
 export const Scoreboard = ({ badgeCount = 0 }) => {
+    // Badge icons from Icons8
+    const badgeIcons = [
+        'https://img.icons8.com/fluency/48/connection-card.png', // Something Bigger - Key Idea
+        'https://img.icons8.com/fluency/48/spotlight.png', // Partnership Spotlight
+        'https://img.icons8.com/fluency/48/dreams.png', // Degree 1 ACT (Dreamscribing)
+        'https://img.icons8.com/fluency/48/infinity.png', // Keeping Something Bigger Alive
+        'https://img.icons8.com/fluency/48/sparkling.png', // Future badges
+    ];
+
     return (
         <div style={{
             position: 'fixed',
@@ -16,6 +25,7 @@ export const Scoreboard = ({ badgeCount = 0 }) => {
             alignItems: 'center',
             gap: '20px',
             boxShadow: '0 0 10px #FFD700, inset 0 0 20px rgba(255, 215, 0, 0.2)',
+            zIndex: 1000
         }}>
             <div style={{
                 display: 'flex',
@@ -28,7 +38,7 @@ export const Scoreboard = ({ badgeCount = 0 }) => {
                     marginBottom: '5px',
                     textTransform: 'uppercase'
                 }}>
-                    Score
+                    Badges
                 </div>
                 <div style={{
                     fontSize: '24px',
@@ -46,26 +56,53 @@ export const Scoreboard = ({ badgeCount = 0 }) => {
                 background: 'rgba(255, 255, 255, 0.3)'
             }} />
 
-            {/* Icons Placeholder */}
+            {/* Badge Icons */}
             <div style={{
                 display: 'flex',
-                gap: '10px'
+                gap: '10px',
+                flexWrap: 'wrap',
+                maxWidth: '200px'
             }}>
-                {[0, 1].map((i) => (
+                {badgeIcons.slice(0, 6).map((iconUrl, i) => (
                     <div key={i} style={{
-                        width: '30px',
-                        height: '30px',
-                        background: i < badgeCount ? '#FFD700' : 'rgba(255, 255, 255, 0.1)',
-                        border: '2px solid rgba(255, 255, 255, 0.3)',
-                        borderRadius: '50%',
+                        width: '36px',
+                        height: '36px',
+                        background: i < badgeCount ? 'rgba(255, 215, 0, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                        border: `2px solid ${i < badgeCount ? '#FFD700' : 'rgba(255, 255, 255, 0.2)'}`,
+                        borderRadius: '8px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '12px',
-                        color: i < badgeCount ? '#000' : '#fff',
-                        boxShadow: i < badgeCount ? '0 0 10px #FFD700' : 'none'
+                        boxShadow: i < badgeCount ? '0 0 10px rgba(255, 215, 0, 0.5)' : 'none',
+                        transition: 'all 0.3s ease',
+                        position: 'relative',
+                        overflow: 'hidden'
                     }}>
-                        {i < badgeCount ? '★' : '?'}
+                        {i < badgeCount ? (
+                            <img 
+                                src={iconUrl} 
+                                alt={`Badge ${i + 1}`}
+                                style={{
+                                    width: '28px',
+                                    height: '28px',
+                                    objectFit: 'contain'
+                                }}
+                                onError={(e) => {
+                                    if (e.target && e.target.parentElement) {
+                                        e.target.style.display = 'none';
+                                        e.target.parentElement.innerHTML = '⭐';
+                                        e.target.parentElement.style.fontSize = '20px';
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <span style={{
+                                fontSize: '18px',
+                                color: 'rgba(255, 255, 255, 0.3)'
+                            }}>
+                                ?
+                            </span>
+                        )}
                     </div>
                 ))}
             </div>

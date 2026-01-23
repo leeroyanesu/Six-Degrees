@@ -1,8 +1,7 @@
 // Infinite.jsx with ecctrl character controller
 
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
 import Ecctrl from '../ecctrl/src/Ecctrl'
 
 export function Infinite({ disableControl = false, ...props }) {

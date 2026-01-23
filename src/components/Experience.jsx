@@ -5,7 +5,11 @@ import { Scene1 } from "./Scene1";
 // Scene Manager Component
 export const Experience = ({
   onLoad,
-  onStarEnter
+  onTextComplete,
+  onFadeProgress,
+  onStarEnter,
+  hiddenStars = new Set(),
+  fadeProgress = 1
 }) => {
   const [currentScene, setCurrentScene] = useState(1);
 
@@ -21,8 +25,12 @@ export const Experience = ({
         return (
           <Scene1
             onLoad={onLoad}
+            onTextComplete={onTextComplete}
+            onFadeProgress={onFadeProgress}
             onStarEnter={onStarEnter}
             onSceneComplete={handleScene1Complete}
+            hiddenStars={hiddenStars}
+            fadeProgress={fadeProgress}
           />
         );
       // case 2:
@@ -33,6 +41,7 @@ export const Experience = ({
             onLoad={onLoad}
             onStarEnter={onStarEnter}
             onSceneComplete={handleScene1Complete}
+            hiddenStars={hiddenStars}
           />
         );
     }

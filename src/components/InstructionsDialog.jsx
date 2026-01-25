@@ -5,25 +5,24 @@ export const InstructionsDialog = ({ onComplete, start, isMobile }) => {
     const [index, setIndex] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
     const hasCompletedRef = useRef(false);
-    const fullTextRef = useRef(
-        isMobile 
-            ? "• Use the joystick (bottom left) to move\n• Find glowing stars (people who teamed up)\n• Complete tasks to earn badges\n• Draw the Second Degree island closer!"
-            : "• WASD/Arrows to move • Space to jump • Shift to run\n• Find glowing stars (people who teamed up)\n• Complete tasks to earn badges\n• Draw the Second Degree island closer!"
-    );
+    
+    const fullText = isMobile 
+        ? "• Use the joystick (bottom left) to move\n• Find glowing stars (people who teamed up)\n• Complete tasks to earn badges\n• Draw the Second Degree island closer!"
+        : "• WASD/Arrows to move • Space to jump • Shift to run\n• Find glowing stars (people who teamed up)\n• Complete tasks to earn badges\n• Draw the Second Degree island closer!";
 
     useEffect(() => {
         if (!start || hasCompletedRef.current) return;
         
-        if (index < fullTextRef.current.length) {
+        if (index < fullText.length) {
             const timeout = setTimeout(() => {
-                setDisplayedText((prev) => prev + fullTextRef.current.charAt(index));
+                setDisplayedText((prev) => prev + fullText.charAt(index));
                 setIndex((prev) => prev + 1);
             }, 35);
             return () => clearTimeout(timeout);
-        } else if (index >= fullTextRef.current.length) {
+        } else if (index >= fullText.length) {
             setIsFinished(true);
         }
-    }, [index, start]);
+    }, [index, start, fullText]);
 
     // Auto-close after typing finishes
     useEffect(() => {

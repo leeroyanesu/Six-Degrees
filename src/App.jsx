@@ -5,6 +5,7 @@ import { Scoreboard } from "./components/Scoreboard";
 import { Notebook } from "./components/Notebook";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { WelcomeDialog } from "./components/WelcomeDialog";
+import { InstructionsDialog } from "./components/InstructionsDialog";
 import { ImpactorPopup } from "./components/ImpactorPopup";
 import { SomethingBiggerIntro } from "./components/SomethingBiggerIntro";
 import { NurtureExercisePopup } from "./components/NurtureExercisePopup";
@@ -12,6 +13,7 @@ import { WonderousRelationshipPopup } from "./components/WonderousRelationshipPo
 import { DreamscribingPopup } from "./components/DreamscribingPopup";
 import { KeepPracticePopup } from "./components/KeepPracticePopup";
 import { ConnectPopup } from "./components/ConnectPopup";
+import { NewIslandPopup } from "./components/NewIslandPopup";
 import { WalkingSoundController } from "./components/WalkingSoundController";
 import { Leva } from "leva";
 import { KeyboardControls } from "@react-three/drei";
@@ -81,11 +83,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   // Game State
   const [collectedStars, setCollectedStars] = useState(new Set());
   const [hiddenStars, setHiddenStars] = useState(new Set());
   const [activeImpactor, setActiveImpactor] = useState(null);
+  const [savedPlayerPosition, setSavedPlayerPosition] = useState(null);
   const [showSomethingBiggerIntro, setShowSomethingBiggerIntro] = useState(false);
   const [hasSeenIntro, setHasSeenIntro] = useState(false);
   const [showNurtureExercise, setShowNurtureExercise] = useState(false);
@@ -98,6 +102,7 @@ function App() {
   const [hasSeenKeepPractice, setHasSeenKeepPractice] = useState(false);
   const [showConnect, setShowConnect] = useState(false);
   const [hasSeenConnect, setHasSeenConnect] = useState(false);
+  const [showNewIsland, setShowNewIsland] = useState(false);
   const [badges, setBadges] = useState([]);
   const [myActions, setMyActions] = useState([]);
   const [fadeProgress, setFadeProgress] = useState(0);
@@ -136,6 +141,9 @@ function App() {
   }, []);
 
   const handleStarEnter = (id) => {
+    // Don't show popup if star is already collected
+    if (collectedStars.has(id)) return;
+    
     const impactor = IMPACTORS.find(i => i.id === id);
     if (impactor) {
       setActiveImpactor(impactor);
@@ -143,59 +151,59 @@ function App() {
   };
 
   const handleImpactorClose = () => {
-    if (activeImpactor) {
-      const isFirstStar = collectedStars.size === 0 && !hasSeenIntro;
-      const isSecondStar = collectedStars.size === 1 && hasSeenIntro && !hasSeenNurture;
-      const isThirdStar = collectedStars.size === 2 && hasSeenNurture && !hasSeenWonderous;
-      const isFourthStar = collectedStars.size === 3 && hasSeenWonderous && !hasSeenDreamscribing;
-      const isFifthStar = collectedStars.size === 4 && hasSeenDreamscribing && !hasSeenKeepPractice;
-      const isSixthStar = collectedStars.size === 5 && hasSeenKeepPractice && !hasSeenConnect;
+    if (!activeImpactor) return;
+    
+    const isFirstStar = collectedStars.size === 0 && !hasSeenIntro;
+    const isSecondStar = collectedStars.size === 1 && hasSeenIntro && !hasSeenNurture;
+    const isThirdStar = collectedStars.size === 2 && hasSeenNurture && !hasSeenWonderous;
+    const isFourthStar = collectedStars.size === 3 && hasSeenWonderous && !hasSeenDreamscribing;
+    const isFifthStar = collectedStars.size === 4 && hasSeenDreamscribing && !hasSeenKeepPractice;
+    const isSixthStar = collectedStars.size === 5 && hasSeenKeepPractice && !hasSeenConnect;
 
-      setCollectedStars(prev => {
-        const newSet = new Set(prev);
-        newSet.add(activeImpactor.id);
-        return newSet;
-      });
+    setCollectedStars(prev => {
+      const newSet = new Set(prev);
+      newSet.add(activeImpactor.id);
+      return newSet;
+    });
 
-      const currentStarId = activeImpactor.id;
-      setActiveImpactor(null);
+    const currentStarId = activeImpactor.id;
+    setActiveImpactor(null);
 
-      // Show Something Bigger intro after first star
-      if (isFirstStar) {
-        setTimeout(() => {
-          setShowSomethingBiggerIntro(true);
-        }, 300);
-      }
-      // Show Nurture exercise after second star
-      else if (isSecondStar) {
-        setTimeout(() => {
-          setShowNurtureExercise(true);
-        }, 300);
-      }
-      // Show Wondrous Relationship exercise after third star
-      else if (isThirdStar) {
-        setTimeout(() => {
-          setShowWonderousRelationship(true);
-        }, 300);
-      }
-      // Show Dreamscribing exercise after fourth star
-      else if (isFourthStar) {
-        setTimeout(() => {
-          setShowDreamscribing(true);
-        }, 300);
-      }
-      // Show Keep Practice exercise after fifth star
-      else if (isFifthStar) {
-        setTimeout(() => {
-          setShowKeepPractice(true);
-        }, 300);
-      }
-      // Show Connect exercise after sixth star
-      else if (isSixthStar) {
-        setTimeout(() => {
-          setShowConnect(true);
-        }, 300);
-      }
+    // Show Something Bigger intro after first star
+    if (isFirstStar) {
+      setTimeout(() => {
+        setShowSomethingBiggerIntro(true);
+      }, 300);
+    }
+    // Show Nurture exercise after second star
+    else if (isSecondStar) {
+      setTimeout(() => {
+        setShowNurtureExercise(true);
+      }, 300);
+    }
+    // Show Wonderous Relationship exercise after third star
+    else if (isThirdStar) {
+      setTimeout(() => {
+        setShowWonderousRelationship(true);
+      }, 300);
+    }
+    // Show Dreamscribing exercise after fourth star
+    else if (isFourthStar) {
+      setTimeout(() => {
+        setShowDreamscribing(true);
+      }, 300);
+    }
+    // Show Keep Practice exercise after fifth star
+    else if (isFifthStar) {
+      setTimeout(() => {
+        setShowKeepPractice(true);
+      }, 300);
+    }
+    // Show Connect exercise after sixth star
+    else if (isSixthStar) {
+      setTimeout(() => {
+        setShowConnect(true);
+      }, 300);
     }
   };
 
@@ -337,6 +345,11 @@ function App() {
     setShowConnect(false);
     setHasSeenConnect(true);
 
+    // Show new island discovery popup
+    setTimeout(() => {
+      setShowNewIsland(true);
+    }, 500);
+
     // Play success sound
     if (successSoundRef.current) {
       successSoundRef.current.play();
@@ -396,7 +409,7 @@ function App() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const isPopupOpen = showWelcome || activeImpactor !== null || showSomethingBiggerIntro || showNurtureExercise || showWonderousRelationship || showDreamscribing || showKeepPractice || showConnect;
+  const isPopupOpen = showWelcome || showInstructions || activeImpactor !== null || showSomethingBiggerIntro || showNurtureExercise || showWonderousRelationship || showDreamscribing || showKeepPractice || showConnect || showNewIsland;
 
   const keyboardMap = useMemo(() => [
     { name: 'forward', keys: isPopupOpen ? [] : ['ArrowUp', 'KeyW'] },
@@ -419,7 +432,7 @@ function App() {
     <>
       
       <LoadingScreen isLoading={isLoading} />
-      <Leva collapsed hidden />
+      <Leva collapsed hidden/>
       {(isMobile && !isLoading && !isPopupOpen) && (
         <EcctrlJoystick />
       )}
@@ -440,6 +453,8 @@ function App() {
               hiddenStars={hiddenStars}
               fadeProgress={fadeProgress}
               isPopupOpen={isPopupOpen}
+              savedPlayerPosition={savedPlayerPosition}
+              onSavePlayerPosition={setSavedPlayerPosition}
             />
           </Suspense>
         </Canvas>
@@ -451,7 +466,16 @@ function App() {
 
       <WelcomeDialog
         start={!isLoading && showWelcome}
-        onComplete={() => setShowWelcome(false)}
+        onComplete={() => {
+          setShowWelcome(false);
+          setShowInstructions(true);
+        }}
+      />
+
+      <InstructionsDialog
+        start={showInstructions}
+        onComplete={() => setShowInstructions(false)}
+        isMobile={isMobile}
       />
 
       <ImpactorPopup
@@ -492,6 +516,12 @@ function App() {
       {showConnect && (
         <ConnectPopup
           onComplete={handleConnectComplete}
+        />
+      )}
+
+      {showNewIsland && (
+        <NewIslandPopup
+          onClose={() => setShowNewIsland(false)}
         />
       )}
 

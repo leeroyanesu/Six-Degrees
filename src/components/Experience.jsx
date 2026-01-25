@@ -10,7 +10,9 @@ export const Experience = ({
   onStarEnter,
   hiddenStars = new Set(),
   fadeProgress = 1,
-  isPopupOpen = false
+  isPopupOpen = false,
+  savedPlayerPosition,
+  onSavePlayerPosition
 }) => {
   const [currentScene, setCurrentScene] = useState(1);
 
@@ -33,6 +35,8 @@ export const Experience = ({
             hiddenStars={hiddenStars}
             fadeProgress={fadeProgress}
             isPopupOpen={isPopupOpen}
+            savedPlayerPosition={savedPlayerPosition}
+            onSavePlayerPosition={onSavePlayerPosition}
           />
         );
       // case 2:

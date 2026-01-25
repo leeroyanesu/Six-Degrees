@@ -46,7 +46,7 @@ export const ImpactorPopup = ({ data, onClose }) => {
                 onClick={onClose}
                 className="impactor-button"
             >
-                CONTINUE JOURNEY
+                CONTINUE TO TASK
             </button>
         </div>
     );

@@ -5,7 +5,7 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { Howl } from 'howler';
 
-export const Star = ({ position, onPlayerEnter }) => {
+export const Star = ({ position, onPlayerEnter, onSavePlayerPosition }) => {
   const meshRef = useRef();
   const glowRef = useRef();
   const sensorRef = useRef();
@@ -65,6 +65,17 @@ export const Star = ({ position, onPlayerEnter }) => {
 
 
   const handleIntersection = ({ other }) => {
+    // Save player position before opening popup
+    if (onSavePlayerPosition && other.rigidBodyObject) {
+      const playerBody = other.rigidBodyObject;
+      if (playerBody.translation) {
+        const translation = playerBody.translation();
+        const position = [translation.x, translation.y, translation.z];
+        console.log('Saving player position:', position);
+        onSavePlayerPosition(position);
+      }
+    }
+
     // Play star collection sound
     if (starSoundRef.current) {
       starSoundRef.current.play();

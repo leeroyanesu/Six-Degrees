@@ -18,7 +18,9 @@ export const Scene1 = ({
   hiddenStars = new Set(),
   fadeProgress = 1,
   onFadeProgress,
-  isPopupOpen = false
+  isPopupOpen = false,
+  savedPlayerPosition,
+  onSavePlayerPosition
 }) => {
   const directionalLightRef = useRef();
   const directionalLightRef1 = useRef();
@@ -160,6 +162,7 @@ export const Scene1 = ({
               key="star-1"
               position={{ x: -0.5, z: 19 }}
               onPlayerEnter={() => onStarEnter(1)}
+              onSavePlayerPosition={onSavePlayerPosition}
             />
           )}
 
@@ -169,6 +172,7 @@ export const Scene1 = ({
               key="star-2"
               position={{ x: -23, z: -10 }}
               onPlayerEnter={() => onStarEnter(2)}
+              onSavePlayerPosition={onSavePlayerPosition}
             />
           )}
 
@@ -178,6 +182,7 @@ export const Scene1 = ({
               key="star-3"
               position={{ x: 18, z: -13 }}
               onPlayerEnter={() => onStarEnter(3)}
+              onSavePlayerPosition={onSavePlayerPosition}
             />
           )}
 
@@ -187,6 +192,7 @@ export const Scene1 = ({
               key="star-4"
               position={{ x: -2, z: -4 }}
               onPlayerEnter={() => onStarEnter(4)}
+              onSavePlayerPosition={onSavePlayerPosition}
             />
           )}
 
@@ -196,6 +202,7 @@ export const Scene1 = ({
               key="star-5"
               position={{ x: 12, z: 8 }}
               onPlayerEnter={() => onStarEnter(5)}
+              onSavePlayerPosition={onSavePlayerPosition}
             />
           )}
 
@@ -205,11 +212,15 @@ export const Scene1 = ({
               key="star-6"
               position={{ x: -15, z: 5 }}
               onPlayerEnter={() => onStarEnter(6)}
+              onSavePlayerPosition={onSavePlayerPosition}
             />
           )}
 
           {/* Character */}
-          <Infinite key={`char-${isPopupOpen}`} disableControl={isPopupOpen} />
+          <Infinite 
+            disableControl={isPopupOpen} 
+            savedPosition={savedPlayerPosition}
+          />
         </Suspense>
       </Physics>
 

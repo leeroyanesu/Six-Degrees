@@ -1,31 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export const WelcomeDialog = ({ onComplete, start }) => {
-    const fullText = "Purpose is rarely just one person. Most meaningful impact comes from people teaming up. In this Degree, we’ll explore where Something Bigger that might already be happening in your life.";
+    const fullTextRef = useRef("Purpose is rarely just one person. Most meaningful impact comes from people teaming up. In this Degree, we'll explore where Something Bigger might already be happening in your life.");
     const [displayedText, setDisplayedText] = useState("");
     const [index, setIndex] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
+    const hasCompletedRef = useRef(false);
 
     useEffect(() => {
-        if (start && index < fullText.length) {
+        if (start && index < fullTextRef.current.length) {
             const timeout = setTimeout(() => {
-                setDisplayedText((prev) => prev + fullText.charAt(index));
+                setDisplayedText((prev) => prev + fullTextRef.current.charAt(index));
                 setIndex((prev) => prev + 1);
             }, 50); // Typing speed
             return () => clearTimeout(timeout);
-        } else if (index >= fullText.length) {
+        } else if (start && index >= fullTextRef.current.length && !isFinished) {
             setIsFinished(true);
         }
-    }, [index, start, fullText]);
+    }, [index, start, isFinished]);
 
-    // Auto-close after a delay when typing is done? 
-    // User said "until the dialog is done". 
-    // Let's add a small "Continue" prompt or just wait.
-    // Given "keyboard disabled", explicit continue is safer so functionality is clear.
-    // But request said "subtitle style", which usually implies auto-fade. 
-    // Let's do auto-fade after 5 seconds for a smooth cinematic experience.
+    // Auto-close after typing finishes
     useEffect(() => {
-        if (isFinished) {
+        if (isFinished && !hasCompletedRef.current) {
+            hasCompletedRef.current = true;
             const timer = setTimeout(() => {
                 onComplete();
             }, 5000); // Wait 5 seconds after typing finishes

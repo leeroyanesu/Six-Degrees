@@ -25,7 +25,7 @@ export const Scoreboard = ({ badgeCount = 0 }) => {
             alignItems: 'center',
             gap: '10px',
             boxShadow: '0 0 10px #FFD700, inset 0 0 20px rgba(255, 215, 0, 0.2)',
-            zIndex: 1000,
+            zIndex: 999,
             flexWrap: 'wrap'
         }}>
             <style>{
